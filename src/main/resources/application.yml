@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: kotlin-spring
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: http://localhost:9200
+          username: elastic
+          password: changeme
+          use-ssl: false
+          verify-ssl-certs: false
