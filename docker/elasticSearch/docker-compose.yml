@@ -9,7 +9,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
       - cluster.routing.allocation.disk.watermark.low=70%
       - cluster.routing.allocation.disk.watermark.high=85%
       - cluster.routing.allocation.disk.watermark.flood_stage=95%
@@ -33,6 +33,20 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.14.0
+    container_name: logstash
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - "5044:5044"
+    environment:
+      - LS_JAVA_OPTS=-Xmx512m -Xms512m
+    volumes:
+      - ./logstash/logstash_products.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/products.csv:/usr/share/logstash/data/products.csv
 
 volumes:
   esdata:
